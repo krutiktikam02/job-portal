@@ -1,0 +1,16 @@
+# Basic gitleaks config — adjust rules as needed
+[[rules]]
+  id = "AWSKey"
+  description = "AWS Access Key"
+  regex = '''AKIA[0-9A-Z]{16}'''
+  tags = ["key", "aws"]
+
+[[rules]]
+  id = "GoogleOAuthSecret"
+  description = "Google OAuth client secret pattern"
+  regex = '''GOCSPX-[0-9A-Za-z_\-]{16,}'''
+  tags = ["key", "google"]
+
+[allowlist]
+  # Allow the example files and docs
+  paths = ["backend/.env.example", "backend/gcs-key.example.json", "docs/SECRETS.md"]

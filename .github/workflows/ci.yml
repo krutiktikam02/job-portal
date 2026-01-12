@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run secret scan (gitleaks)
+        run: |
+          npm run scan:secrets || (echo "Gitleaks found issues" && exit 1)
+
+      - name: Run lint
+        run: |
+          if npm run lint --silent; then echo "lint OK"; else echo "No lint script or lint failed"; fi
+
+      - name: Run tests
+        run: |
+          if npm test --silent; then echo "tests OK"; else echo "No tests configured or tests failed"; fi

@@ -1,0 +1,24 @@
+# Node
+node_modules/
+
+# Env files
+*.env
+.env.local
+/backend/.env
+/backend/gcs-key.json
+/account credentials.txt
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/

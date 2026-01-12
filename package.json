@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "recharts": "^3.6.0"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "scan:secrets": "npx gitleaks detect --source . --report-format json --report-path gitleaks-report.json"
+  }
+}
