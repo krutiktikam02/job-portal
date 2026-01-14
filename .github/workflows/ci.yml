@@ -30,8 +30,12 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/gcs-key.json" >> $GITHUB_ENV
 
       - name: Run secret scan (gitleaks)
-        run: |
-          npm run scan:secrets || (echo "Gitleaks found issues" && exit 1)
+        uses: zricethezav/gitleaks-action@v2
+        with:
+          args: detect --source . --report-format json --report-path gitleaks-report.json
+        # fail the job when gitleaks finds issues
+        env:
+          GITLEAKS_EXIT_ZERO: "false"
 
       - name: Run lint
         run: |
