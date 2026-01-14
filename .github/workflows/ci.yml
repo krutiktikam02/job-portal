@@ -20,6 +20,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Restore GCP key (if provided)
+        if: ${{ secrets.GCP_SA_KEY != '' }}
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          echo "$GCP_SA_KEY" > $RUNNER_TEMP/gcs-key.json
+          chmod 600 $RUNNER_TEMP/gcs-key.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$RUNNER_TEMP/gcs-key.json" >> $GITHUB_ENV
+
       - name: Run secret scan (gitleaks)
         run: |
           npm run scan:secrets || (echo "Gitleaks found issues" && exit 1)
