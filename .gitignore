@@ -22,3 +22,18 @@ Thumbs.db
 # Build
 dist/
 build/
+
+# Secrets
+docs/SECRETS.md
+gcs-key.json
+backend/gcs-key.json
+backend/gcs-key.*
+
+# Uploads and temp
+Uploads/
+backend/Uploads/
+
+# Reports and local dev files
+gitleaks-report.json
+branch-protection.json
+
