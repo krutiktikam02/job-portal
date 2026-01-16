@@ -4,9 +4,9 @@ node_modules/
 # Env files
 *.env
 .env.local
-/backend/.env
-/backend/gcs-key.json
-/account credentials.txt
+backend/.env
+backend/gcs-key.json
+account credentials.txt
 
 # Logs
 logs/
