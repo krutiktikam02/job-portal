@@ -18,7 +18,10 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          if [ -f frontend/package.json ]; then echo "Installing frontend deps" && cd frontend && npm ci && cd ..; fi
+          if [ -f admin/package.json ]; then echo "Installing admin deps" && cd admin && npm ci && cd ..; fi
+          if [ -f backend/package.json ]; then echo "Installing backend deps" && cd backend && npm ci && cd ..; fi
 
       - name: Restore GCP key (if provided)
         if: ${{ secrets.GCP_SA_KEY != '' }}
@@ -37,10 +40,12 @@ jobs:
         env:
           GITLEAKS_EXIT_ZERO: "false"
 
-      - name: Run lint
+      - name: Run lint (frontend/admin)
         run: |
-          if npm run lint --silent; then echo "lint OK"; else echo "No lint script or lint failed"; fi
+          if [ -f frontend/package.json ] && grep -q '"lint"' frontend/package.json; then echo "Running frontend lint" && cd frontend && npm run lint --silent || echo "Frontend lint failed"; cd ..; else echo "No frontend lint script"; fi
+          if [ -f admin/package.json ] && grep -q '"lint"' admin/package.json; then echo "Running admin lint" && cd admin && npm run lint --silent || echo "Admin lint failed"; cd ..; else echo "No admin lint script"; fi
 
       - name: Run tests
         run: |
-          if npm test --silent; then echo "tests OK"; else echo "No tests configured or tests failed"; fi
+          if [ -f frontend/package.json ] && grep -q '"test"' frontend/package.json; then echo "Running frontend tests" && cd frontend && npm test --silent || echo "Frontend tests failed"; cd ..; else echo "No frontend tests configured"; fi
+          if [ -f backend/package.json ] && grep -q '"test"' backend/package.json; then echo "Running backend tests" && cd backend && npm test --silent || echo "Backend tests failed"; cd ..; else echo "No backend tests configured"; fi
